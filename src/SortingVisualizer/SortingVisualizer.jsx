@@ -7,10 +7,8 @@ import {
 import './SortingVisualizer.css';
 
 // Change this value for the speed of the animations.
-const ANIMATION_SPEED_MS = 10;
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 250;
 
 // This is the main color of the array bars.
 const PRIMARY_COLOR = 'PALETURQUOISE';
@@ -25,6 +23,8 @@ export default class SortingVisualizer extends React.Component {
     this.state = {
       array: [],
       showmsg: false,
+      arr_size: 50,
+      animation_speed: 1,
     };
   }
 
@@ -34,8 +34,8 @@ export default class SortingVisualizer extends React.Component {
 
   resetArray() {
     const array = [];
-    for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
-      array.push(randomIntFromInterval(5, 640));
+    for (let i = 0; i < this.state.arr_size; i++) {
+      array.push(randomIntFromInterval(5, 600));
     }
     this.setState({array: array});
   }
@@ -54,7 +54,7 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.animation_speed);
       } else {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
@@ -62,7 +62,7 @@ export default class SortingVisualizer extends React.Component {
           const tooltip = tooltips[barOneIdx];
           barOneStyle.height = `${newHeight}px`;
           tooltip.innerHTML = newHeight;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.animation_speed);
       }
     }
   }
@@ -81,7 +81,7 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.animation_speed);
       } else {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
@@ -89,7 +89,7 @@ export default class SortingVisualizer extends React.Component {
           const tooltip = tooltips[barOneIdx];
           barOneStyle.height = `${newHeight}px`;
           tooltip.innerHTML = newHeight;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.animation_speed);
       }
     }
   }
@@ -114,7 +114,7 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.animation_speed);
       } else {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
@@ -122,7 +122,7 @@ export default class SortingVisualizer extends React.Component {
           const tooltip = tooltips[barOneIdx];
           barOneStyle.height = `${newHeight}px`;
           tooltip.innerHTML = newHeight;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.animation_speed);
       }
     }
   }
@@ -146,6 +146,13 @@ export default class SortingVisualizer extends React.Component {
     }
   }
 
+  handleSizeChange(e) {
+    let obj = {};
+    this.setState({arr_size: e.target.value});
+    //this.setState(obj);
+    this.resetArray();
+    console.log(this.state.arr_size);
+  }
   render() {
     const {array} = this.state;
 
@@ -167,7 +174,7 @@ export default class SortingVisualizer extends React.Component {
           className="btn btn-dark"
           type="button"
           onClick={() => this.resetArray()}>
-          Generate New Array
+          New Random List
         </button>
         <button className="btn btn-info" onClick={() => this.mergeSort()}>
           Merge Sort
@@ -180,11 +187,24 @@ export default class SortingVisualizer extends React.Component {
         </button>
         <button className="btn btn-info" onClick={() => this.bubbleSort()}>
           Bubble Sort
-        </button>
+        </button>{' '}
+        <hr></hr>
+        <input
+          type="range"
+          min="5"
+          max="200"
+          value={this.state.arr_size}
+          onChange={e => {
+            this.handleSizeChange(e);
+          }}
+          className="form-control-range"
+          style={{width: '200px', position: 'absolute'}}
+          id="slider"></input>
         <button
           className="btn btn-warning"
+          style={{display: 'none'}}
           onClick={() => this.testSortingAlgorithms()}>
-          Test Sorting Algorithms (BROKEN)
+          Test
         </button>
         <div
           id="msg"
