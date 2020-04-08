@@ -1,0 +1,29 @@
+.array-container {
+  position: absolute;
+  left: 10px;
+  /* top: 100px; */
+}
+
+.array-bar {
+  width: 2px;
+  display: inline-block;
+  margin: 0 1px;
+}
+
+.array-bar .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.array-bar:hover .tooltiptext {
+  visibility: visible;
+}
