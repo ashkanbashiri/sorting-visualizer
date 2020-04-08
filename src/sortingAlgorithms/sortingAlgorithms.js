@@ -7,6 +7,7 @@ export function getMergeSortAnimations(array) {
 }
 
 function mergeSortHelper(
+  console.log('to be removed');
   mainArray,
   startIdx,
   endIdx,
