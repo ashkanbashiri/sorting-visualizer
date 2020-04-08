@@ -35,9 +35,9 @@ export default class SortingVisualizer extends React.Component {
   resetArray() {
     const array = [];
     for (let i = 0; i < this.state.arr_size; i++) {
-      array.push(randomIntFromInterval(5, 600));
+      array.push(randomIntFromInterval(1, 400));
     }
-    this.setState({array: array});
+    this.setState({ array: array });
   }
 
   mergeSort() {
@@ -94,12 +94,12 @@ export default class SortingVisualizer extends React.Component {
     }
   }
 
-  heapSort() {}
+  heapSort() { }
 
   bubbleSort() {
-    this.setState({showmsg: true});
-    setTimeout(() => {}, 2000);
-    //this.setState({showmsg: false});
+    this.setState({ showmsg: true });
+    setTimeout(() => { this.setState({ showmsg: false }); }, 3000);
+
 
     const [animations, temp] = getBubbleSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
@@ -148,83 +148,100 @@ export default class SortingVisualizer extends React.Component {
 
   handleSizeChange(e) {
     let obj = {};
-    this.setState({arr_size: e.target.value});
+    this.setState({ arr_size: e.target.value });
     //this.setState(obj);
     this.resetArray();
     console.log(this.state.arr_size);
   }
   render() {
-    const {array} = this.state;
+    const { array } = this.state;
 
     return (
-      <div className="array-container">
-        {array.map((value, idx) => (
-          <div
-            className="array-bar"
-            key={idx}
-            style={{
-              backgroundColor: PRIMARY_COLOR,
-              height: `${value}px`,
-            }}>
-            <div className="tooltiptext">{value}</div>
+      <div className="grid-container">
+        <div className="header">
+          <div>
+            <button
+              className="btn btn-dark"
+              type="button"
+              onClick={() => this.resetArray()}>
+              New Random List
+        </button>
           </div>
-        ))}
-        <br />
-        <button
-          className="btn btn-dark"
-          type="button"
-          onClick={() => this.resetArray()}>
-          New Random List
+          <div>
+            <button className="btn btn-info" onClick={() => this.mergeSort()}>
+              Merge Sort
         </button>
-        <button className="btn btn-info" onClick={() => this.mergeSort()}>
-          Merge Sort
+          </div>
+          <div>
+            <button className="btn btn-info" onClick={() => this.quickSort()}>
+              Quick Sort
         </button>
-        <button className="btn btn-info" onClick={() => this.quickSort()}>
-          Quick Sort
+          </div>
+          <div>
+            <button className="btn btn-info" onClick={() => this.heapSort()}>
+              Heap Sort
         </button>
-        <button className="btn btn-info" onClick={() => this.heapSort()}>
-          Heap Sort
+          </div>
+          <div>
+            <button className="btn btn-info" onClick={() => this.bubbleSort()}>
+              Bubble Sort
+        </button></div>
+          <hr></hr>
+          <div className="input-range">
+            <p>Array Size: </p>
+            <input
+              type="range"
+              min="5"
+              max="200"
+              className="input-range"
+              value={this.state.arr_size}
+              onChange={e => {
+                this.handleSizeChange(e);
+              }}
+              id="slider" />
+            <div className="tooltiptext">{this.state.arr_size}</div>
+
+          </div>
+          <button
+            className="btn btn-warning"
+            style={{ display: 'none' }}
+            onClick={() => this.testSortingAlgorithms()}>
+            Test
         </button>
-        <button className="btn btn-info" onClick={() => this.bubbleSort()}>
-          Bubble Sort
-        </button>{' '}
-        <hr></hr>
-        <input
-          type="range"
-          min="5"
-          max="200"
-          value={this.state.arr_size}
-          onChange={e => {
-            this.handleSizeChange(e);
-          }}
-          className="form-control-range"
-          style={{width: '200px', position: 'absolute'}}
-          id="slider"></input>
-        <button
-          className="btn btn-warning"
-          style={{display: 'none'}}
-          onClick={() => this.testSortingAlgorithms()}>
-          Test
-        </button>
-        <div
-          id="msg"
-          style={{
-            display: this.state.showmsg ? 'block' : 'None',
-            position: `fixed`,
-            width: `500px`,
-            height: `200px`,
-            top: `50%`,
-            left: `50%`,
-            color: `gray`,
-            fontWeight: 'bold',
-            backgroundColor: 'cyan',
-            textAlign: 'center',
-            marginTop: `-100px`,
-            marginLeft: `-250px`,
-          }}>
-          Don't Hold your Breath!
         </div>
-      </div>
+        <div className="middle">
+          {array.map((value, idx) => (
+            <div
+              className="array-bar"
+              key={idx}
+              style={{
+                backgroundColor: PRIMARY_COLOR,
+                height: `${value}px`,
+              }}>
+              <div className="tooltiptext">{value}</div>
+            </div>
+          ))}
+          <br />
+
+          <div
+            id="msg"
+            style={{
+              display: this.state.showmsg ? 'block' : 'None',
+              position: `fixed`,
+              width: `500px`,
+              height: `100px`,
+              top: `50%`,
+              left: `50%`,
+              color: `gray`,
+              fontWeight: 'bold',
+              backgroundColor: 'cyan',
+              textAlign: 'center',
+              marginTop: `-100px`,
+              marginLeft: `-250px`,
+            }}>
+            SPOILERS! BubbleSort is a bit slow --> O(N^2)
+        </div>
+        </div></div>
     );
   }
 }
