@@ -2,7 +2,7 @@
   "name": "sorting-visualizer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ashkanbashiri.github.io/sorting-visualizer",
+  "homepage": "https://ashkanbashiri.github.io/sorting-visualizer/",
   "dependencies": {
     "bootstrap": "^4.4.1",
     "react": "^16.10.2",
