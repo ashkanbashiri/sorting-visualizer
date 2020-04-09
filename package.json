@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://ashkanbashiri.github.io/sorting-visualizer/",
   "dependencies": {
+    "@popperjs/core": "^2.2.1",
     "bootstrap": "^4.4.1",
     "react": "^16.10.2",
     "react-bootstrap": "^1.0.0",

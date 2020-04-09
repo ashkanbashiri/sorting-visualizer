@@ -25,6 +25,12 @@ export default class SortingVisualizer extends React.Component {
       showmsg: false,
       arr_size: 50,
       animation_speed: 1,
+      quickSortDisabled: false,
+      heapSortDisabled: false,
+      mergeSortDisabled: false,
+      bubbleSortDisabled: false,
+      sliderDisabled: false,
+      resetArrayDisabled: false,
     };
   }
 
@@ -40,7 +46,28 @@ export default class SortingVisualizer extends React.Component {
     this.setState({ array: array });
   }
 
+  disableAll() {
+    this.setState({
+      quickSortDisabled: true,
+      heapSortDisabled: true,
+      mergeSortDisabled: true,
+      bubbleSortDisabled: true,
+      sliderDisabled: true,
+      resetArrayDisabled: true
+    });
+  }
+  enableAll() {
+    this.setState({
+      quickSortDisabled: false,
+      heapSortDisabled: false,
+      mergeSortDisabled: false,
+      bubbleSortDisabled: false,
+      sliderDisabled: false,
+      resetArrayDisabled: false
+    });
+  }
   mergeSort() {
+    this.disableAll();
     const [animations, temp] = getMergeSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
@@ -62,12 +89,16 @@ export default class SortingVisualizer extends React.Component {
           const tooltip = tooltips[barOneIdx];
           barOneStyle.height = `${newHeight}px`;
           tooltip.innerHTML = newHeight;
+          if (i == animations.length - 1)
+            this.enableAll();
         }, i * this.state.animation_speed);
       }
     }
+    //this.enableAll();
   }
 
   quickSort() {
+    this.disableAll();
     const [animations, temp] = getquickSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
@@ -89,18 +120,30 @@ export default class SortingVisualizer extends React.Component {
           const tooltip = tooltips[barOneIdx];
           barOneStyle.height = `${newHeight}px`;
           tooltip.innerHTML = newHeight;
+          if (i == animations.length - 1)
+            this.enableAll();
         }, i * this.state.animation_speed);
       }
     }
+    /* document.getElementById("slider").disabled = false;
+     document.getElementById("resetArray").disabled = false;
+     document.getElementById("quickSort").disabled = false;
+     document.getElementById("bubbleSort").disabled = false;
+     document.getElementById("mergeSort").disabled = false;
+     document.getElementById("heapSort").disabled = false;*/
+
+  }
+
+  afterSort() {
+
   }
 
   heapSort() { }
 
   bubbleSort() {
+    this.disableAll();
     this.setState({ showmsg: true });
     setTimeout(() => { this.setState({ showmsg: false }); }, 3000);
-
-
     const [animations, temp] = getBubbleSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
@@ -122,6 +165,8 @@ export default class SortingVisualizer extends React.Component {
           const tooltip = tooltips[barOneIdx];
           barOneStyle.height = `${newHeight}px`;
           tooltip.innerHTML = newHeight;
+          if (i == animations.length - 1)
+            this.enableAll();
         }, i * this.state.animation_speed);
       }
     }
@@ -153,6 +198,8 @@ export default class SortingVisualizer extends React.Component {
     this.resetArray();
     console.log(this.state.arr_size);
   }
+  //<div className="tooltiptext">{this.state.arr_size}</div>
+
   render() {
     const { array } = this.state;
 
@@ -160,48 +207,52 @@ export default class SortingVisualizer extends React.Component {
       <div className="grid-container">
         <div className="header">
           <div>
+            <div className="input-range">
+              <p><b>Array Size: </b></p>
+              <input
+                type="range"
+                min="5"
+                max="200" data-toggle="tooltip" data-placement="left" title={this.state.arr_size}
+                className="input-range"
+                disabled={this.state.sliderDisabled}
+                value={this.state.arr_size}
+                onChange={e => {
+                  this.handleSizeChange(e);
+                }}
+                id="slider" />
+            </div>
             <button
+              id="resetArray"
               className="btn btn-dark"
+              disabled={this.state.resetArrayDisabled}
               type="button"
               onClick={() => this.resetArray()}>
               New Random List
-        </button>
+            </button>
           </div>
           <div>
-            <button className="btn btn-info" onClick={() => this.mergeSort()}>
+            <button id="mergeSort" disabled={this.state.mergeSortDisabled}
+              className="btn btn-info" onClick={() => this.mergeSort()}>
               Merge Sort
         </button>
           </div>
           <div>
-            <button className="btn btn-info" onClick={() => this.quickSort()}>
+            <button id="quickSort" disabled={this.state.quickSortDisabled}
+              className="btn btn-info" onClick={() => this.quickSort()}>
               Quick Sort
         </button>
           </div>
           <div>
-            <button className="btn btn-info" onClick={() => this.heapSort()}>
+            <button id="heapSort" disabled={this.state.heapSortDisabled}
+              className="btn btn-info" onClick={() => this.heapSort()}>
               Heap Sort
         </button>
           </div>
           <div>
-            <button className="btn btn-info" onClick={() => this.bubbleSort()}>
+            <button id="bubbleSort" disabled={this.state.bubbleSortDisabled}
+              className="btn btn-info" onClick={() => this.bubbleSort()}>
               Bubble Sort
         </button></div>
-          <hr></hr>
-          <div className="input-range">
-            <p>Array Size: </p>
-            <input
-              type="range"
-              min="5"
-              max="200"
-              className="input-range"
-              value={this.state.arr_size}
-              onChange={e => {
-                this.handleSizeChange(e);
-              }}
-              id="slider" />
-            <div className="tooltiptext">{this.state.arr_size}</div>
-
-          </div>
           <button
             className="btn btn-warning"
             style={{ display: 'none' }}
@@ -241,7 +292,10 @@ export default class SortingVisualizer extends React.Component {
             }}>
             SPOILERS! BubbleSort is a bit slow --> O(N^2)
         </div>
-        </div></div>
+        </div>
+
+      </div>
+
     );
   }
 }
